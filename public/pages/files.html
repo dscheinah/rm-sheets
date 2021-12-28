@@ -1,0 +1,70 @@
+<template>
+    <div id="files">
+        <h1>rM Sheets</h1>
+        <div class="sx-cards">
+            <section>
+                <h2>Ausgewählte Dateien</h2>
+                <ul id="files-selected"></ul>
+            </section>
+            <section>
+                <h2>Verfügbare Dateien</h2>
+                <ul id="files-available"></ul>
+            </section>
+        </div>
+    </div>
+</template>
+
+<script type="module">
+  import {helper, page, state} from '../js/app.js';
+
+  page.register('files', ({render, show, listen}) => {
+    let files = state.get('files') || {};
+
+    render(() => {
+      const fileLists = {};
+      helper.list('#files-selected', files.selected || [], (folder, index) => {
+        const li = helper.create('li'), id = `files-selected-${index}`;
+        li.innerHTML = `<details><summary>${folder.name}</summary><ol id="${id}"></ol></details>`;
+        fileLists[id] = folder.children || [];
+        return li;
+      });
+      helper.list('#files-available', files.available || [], (folder, index) => {
+        const li = helper.create('li'), id = `files-available-${index}`;
+        li.innerHTML = `<details><summary>${folder.name}</summary><ul id="${id}"></ul></details>`;
+        fileLists[id] = folder.children || [];
+        return li;
+      });
+      for (const [id, children] of Object.entries(fileLists)) {
+        helper.list(`#${id}`, children, (file) => {
+          const li = helper.create('li');
+          li.innerHTML = file.name;
+          return li;
+        });
+      }
+    });
+
+    show(() => {
+        state.dispatch('files', null);
+    });
+
+    listen('files', (payload) => {
+      files = payload;
+      state.dispatch('loading', false);
+    });
+  });
+</script>
+
+<style>
+    #files section {
+        flex: 1 1 auto;
+    }
+
+    #files summary, #files li {
+        margin-bottom: .5em;
+    }
+
+    #files-selected, #files-available {
+        list-style-type: none;
+        padding-left: 1em;
+    }
+</style>

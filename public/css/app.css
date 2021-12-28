@@ -3,17 +3,18 @@
 @import "../vendor/dscheinah/sx-css/src/layout.css";
 @import "../vendor/dscheinah/sx-css/src/menu.css";
 /* Only the modules required for the example are imported. Add more if needed. */
+@import "../vendor/dscheinah/sx-css/src/cards.css";
 
 :root {
     /* Used for navigations and highlighted (non interactive) parts. */
-    --primary-color: gray;
-    --primary-color-highlight: lightgray;
+    --primary-color: #293939;
+    --primary-color-highlight: #b9c3c7;
     --primary-color-inverse: white;
     /* Used for interactive parts (buttons and errors). */
-    --secondary-color: gray;
-    --secondary-color-highlight: lightgrey;
+    --secondary-color: #cb7428;
+    --secondary-color-highlight: #c15f07;
     --secondary-color-inverse: white;
     /* Used for interactive highlights (anchors and focus). */
-    --tertiary-color: gray;
-    --tertiary-color-highlight: lightgrey;
+    --tertiary-color: #cb7428;
+    --tertiary-color-highlight: #c15f07;
 }

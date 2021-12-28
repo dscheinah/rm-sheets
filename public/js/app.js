@@ -4,7 +4,8 @@ import State from '../vendor/dscheinah/sx-js/src/State.js';
 import init from './app/init.js';
 import navigate from './app/navigate.js';
 import * as data from './repository/data.js';
-// By separating the helpers to it's own namespace they do not need to packed to an object here.
+import * as files from './repository/files.js';
+// By separating the helpers to its own namespace they do not need to packed to an object here.
 import * as helper from './helper.js';
 
 // Create the global event listener (on window) to be used for e.g. navigation.
@@ -39,6 +40,7 @@ state.listen('sx-show', () => state.dispatch('loading', false));
 
 // This is a simple example for async global state management.
 state.handle('backend-data', (payload) => data.load(payload));
+state.handle('files', () => files.load());
 
 // Define all pages and load the main page. The ID defined here is globally used for:
 //  - handling navigation by href or value (see above)
@@ -47,8 +49,9 @@ state.handle('backend-data', (payload) => data.load(payload));
 // For real routing you can replace window.location.href with custom paths for each page.
 page.add('home', 'pages/home.html', window.location.href);
 page.add('backend', 'pages/backend.html', window.location.href);
+page.add('files', 'pages/files.html', window.location.href);
 // If used with routing this must be replaced with a check on the called route.
-page.show('home');
+page.show('files');
 
 // The app.js file is used as a kind of service manager for dependency injection.
 // Import the file in pages to get access to the exported modules.
