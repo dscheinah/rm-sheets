@@ -1,5 +1,3 @@
-# sx-skeleton
+# rm-sheets
 
-This is a common setup for a simple sx application.
-
-All documentation and usage instructions must be derived from the commented example code.
+A simple tool and collection of scripts I use to manage files on the ReMarkable.
