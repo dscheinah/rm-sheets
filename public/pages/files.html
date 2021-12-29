@@ -1,5 +1,5 @@
 <template>
-    <div id="files">
+    <form id="files">
         <h1>rM Sheets</h1>
         <div class="sx-cards">
             <section>
@@ -8,47 +8,110 @@
             </section>
             <section>
                 <h2>Verfügbare Dateien</h2>
+                <input id="files-search" type="search" placeholder="Suchen" aria-label="Suchen" accesskey="f"/>
                 <ul id="files-available"></ul>
             </section>
         </div>
-    </div>
+        <div class="sx-actions">
+            <button accesskey="s"><span class="sx-button-icon">🖫</span>speichern</button>
+            <div class="sx-fill"></div>
+            <button id="files-select" accesskey="m" type="button"><span class="sx-button-icon">↖</span>auswählen</button>
+        </div>
+    </form>
 </template>
 
 <script type="module">
   import {helper, page, state} from '../js/app.js';
 
-  page.register('files', ({render, show, listen}) => {
-    let files = state.get('files') || {};
+  page.register('files', ({render, show, action, listen}) => {
+    let selected = state.get('files-selected');
+    let available = state.get('files-available');
 
     render(() => {
-      const fileLists = {};
-      helper.list('#files-selected', files.selected || [], (folder, index) => {
-        const li = helper.create('li'), id = `files-selected-${index}`;
-        li.innerHTML = `<details><summary>${folder.name}</summary><ol id="${id}"></ol></details>`;
-        fileLists[id] = folder.children || [];
-        return li;
-      });
-      helper.list('#files-available', files.available || [], (folder, index) => {
-        const li = helper.create('li'), id = `files-available-${index}`;
-        li.innerHTML = `<details><summary>${folder.name}</summary><ul id="${id}"></ul></details>`;
-        fileLists[id] = folder.children || [];
-        return li;
-      });
-      for (const [id, children] of Object.entries(fileLists)) {
-        helper.list(`#${id}`, children, (file) => {
-          const li = helper.create('li');
-          li.innerHTML = file.name;
-          return li;
+      const selectedFiles = {};
+      helper.list('#files-selected', selected || [], (folder) => {
+        const li = helper.create('li');
+        const list = [];
+        folder.children.forEach((file) => {
+          const moveUp = `<button type="button" title="nach oben" data-up="${file.id}">⇑</button>`;
+          const moveDown = `<button type="button" title="nach unten" data-down="${file.id}">⇓</button>`;
+          const remove = `<button type="button" title="entfernen" data-remove="${file.id}">🗑</button>`;
+          list.push(`<li>${moveUp}${moveDown}<span>${file.name}</span>${remove}</li>`);
+          selectedFiles[file.original] = true;
         });
-      }
+        li.innerHTML = `<details open><summary>${folder.name}</summary><ol>${list.join('')}</ol></details>`;
+        return li;
+      });
+      helper.list('#files-available', available || [], (folder) => {
+        const li = helper.create('li');
+        const list = [];
+        folder.children.forEach((file) => {
+          const disabled = selectedFiles[file.original] ? 'title="bereits ausgewählt" disabled' : '';
+          const input = `<input type="checkbox" name="select" value="${file.original}" ${disabled}/>`;
+          list.push(`<li class="sx-checkbox">${input}${file.name}</li>`);
+        });
+        li.innerHTML = `<details open><summary>${folder.name}</summary><ul>${list.join('')}</ul></details>`;
+        return li;
+      });
     });
 
     show(() => {
-        state.dispatch('files', null);
+      if (!selected) {
+        state.dispatch('files-selected', null);
+      }
+      if (!available) {
+        state.dispatch('files-available', null);
+      }
     });
 
-    listen('files', (payload) => {
-      files = payload;
+    action('#files-search', 'input', (event, target) => {
+      state.dispatch('loading', true);
+      state.dispatch('files-available', target.value);
+    });
+
+    action('#files [data-up]', 'click', (event, target) => {
+      selected.forEach((folder) => {
+        const i = folder.children.findIndex(file => file.id.toString() === target.dataset.up);
+        if (i >= 0) {
+          [folder.children[i], folder.children[i - 1]] = [folder.children[i - 1], folder.children[i]]
+        }
+      });
+      state.set('files-selected', selected);
+    });
+
+    action('#files [data-down]', 'click', (event, target) => {
+      selected.forEach((folder) => {
+        const i = folder.children.findIndex(file => file.id.toString() === target.dataset.down);
+        if (i >= 0) {
+          [folder.children[i], folder.children[i + 1]] = [folder.children[i + 1], folder.children[i]]
+        }
+      });
+      state.set('files-selected', selected);
+    });
+
+    action('#files [data-remove]', 'click', (event, target) => {
+      selected.forEach((folder) => {
+        const i = folder.children.findIndex(file => file.id.toString() === target.dataset.remove);
+        if (i >= 0) {
+          folder.children.splice(i, 1);
+        }
+      });
+      state.set('files-selected', selected);
+    });
+
+    action('#files-select', 'click', () => {
+      const data = new FormData(helper.element('#files'));
+      state.dispatch('files-select', data.getAll('select'));
+      page.show('files-select');
+    });
+
+    listen('files-selected', (payload) => {
+      selected = payload;
+      state.dispatch('loading', false);
+    });
+
+    listen('files-available', (payload) => {
+      available = payload;
       state.dispatch('loading', false);
     });
   });
@@ -66,5 +129,41 @@
     #files-selected, #files-available {
         list-style-type: none;
         padding-left: 1em;
+    }
+
+    #files-selected ol {
+        padding: 0;
+    }
+
+    #files-selected ol li {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid var(--primary-color-highlight);
+        padding: .5em 0;
+    }
+
+    #files-selected ol li:first-child [data-up] {
+        visibility: hidden;
+    }
+
+    #files-selected ol li:last-child [data-down] {
+        visibility: hidden;
+    }
+
+    #files-selected span {
+        width: 100%;
+        margin: 0 1em;
+    }
+
+    #files-selected button {
+        color: var(--secondary-color);
+        background: none;
+        box-shadow: none;
+        padding: 0;
+        margin: 0 .5em;
+    }
+
+    #files-selected button:hover {
+        color: var(--secondary-color-highlight);
     }
 </style>

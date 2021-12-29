@@ -40,7 +40,8 @@ state.listen('sx-show', () => state.dispatch('loading', false));
 
 // This is a simple example for async global state management.
 state.handle('backend-data', (payload) => data.load(payload));
-state.handle('files', () => files.load());
+state.handle('files-selected', () => files.loadSelected());
+state.handle('files-available', (term) => files.loadAvailable(term));
 
 // Define all pages and load the main page. The ID defined here is globally used for:
 //  - handling navigation by href or value (see above)
@@ -50,6 +51,7 @@ state.handle('files', () => files.load());
 page.add('home', 'pages/home.html', window.location.href);
 page.add('backend', 'pages/backend.html', window.location.href);
 page.add('files', 'pages/files.html', window.location.href);
+page.add('files-select', 'pages/files/select.html', window.location.href);
 // If used with routing this must be replaced with a check on the called route.
 page.show('files');
 
