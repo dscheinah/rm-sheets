@@ -120,6 +120,7 @@
 <style>
     #files section {
         flex: 1 1 auto;
+        width: 100%;
     }
 
     #files summary, #files li {
@@ -165,5 +166,11 @@
 
     #files-selected button:hover {
         color: var(--secondary-color-highlight);
+    }
+
+    @media only screen and (min-width: 1024px) {
+        #files .sx-cards {
+            flex-wrap: nowrap;
+        }
     }
 </style>
