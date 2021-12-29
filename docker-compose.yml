@@ -5,5 +5,6 @@ services:
       - "${PORT:-80}:80"
     volumes:
       - .:/var/www/html
+      - ${DATA_DIR}:/data
     environment:
       - APP_ENV

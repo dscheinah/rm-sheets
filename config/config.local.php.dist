@@ -6,4 +6,5 @@ return [
     'env' => getenv('APP_ENV'),
     // This can be used to prefix all routes. With that the app is not needed to be hosted on "/".
     'prefix' => '',
+    'data_dir' => '/data',
 ];

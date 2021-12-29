@@ -3,8 +3,12 @@
 namespace App\Container;
 
 use App\ApplicationFactory;
+use App\Handler\AvailableHandler;
+use App\Handler\AvailableHandlerFactory;
 use App\Handler\ListHandler;
 use App\Handler\ListHandlerFactory;
+use App\Repository\AvailableRepository;
+use App\Repository\AvailableRepositoryFactory;
 use App\RouterFactory;
 use Sx\Application\Container\ApplicationProvider;
 use Sx\Container\Injector;
@@ -36,5 +40,7 @@ class Provider implements ProviderInterface
         $injector->set(ApplicationInterface::class, ApplicationFactory::class);
         $injector->set(RouterInterface::class, RouterFactory::class);
         $injector->set(ListHandler::class, ListHandlerFactory::class);
+		$injector->set(AvailableHandler::class, AvailableHandlerFactory::class);
+		$injector->set(AvailableRepository::class, AvailableRepositoryFactory::class);
     }
 }

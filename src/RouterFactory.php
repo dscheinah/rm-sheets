@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Handler\AvailableHandler;
 use App\Handler\ListHandler;
 use Sx\Container\FactoryInterface;
 use Sx\Container\Injector;
@@ -29,6 +30,7 @@ class RouterFactory implements FactoryInterface
         $router = new Router($injector->get(MiddlewareHandlerInterface::class));
         // Add the example handler for the backend page.
         $router->post($prefix . 'list', ListHandler::class);
+		$router->get($prefix . 'available', AvailableHandler::class);
         return $router;
     }
 }

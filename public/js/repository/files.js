@@ -1,44 +1,4 @@
-let available = [
-  {
-    name: 'Ordner',
-    children: [
-      {
-        name: 'Datei',
-        original: 'Ordner/Datei',
-      },
-      {
-        name: 'A',
-        original: 'Ordner/A',
-      },
-    ],
-  },
-  {
-    name: 'Ordner/Unterordner',
-    children: [
-      {
-        name: 'Datei 2',
-        original: 'Ordner/Unterordner/Datei 2',
-      },
-      {
-        name: 'B',
-        original: 'Ordner/Unterordner/B',
-      },
-    ],
-  },
-  {
-    name: 'Ordner 2',
-    children: [
-      {
-        name: 'Weitere Datei',
-        original: 'Ordner 2/Weitere Datei',
-      },
-      {
-        name: 'C',
-        original: 'Ordner 2/C',
-      },
-    ],
-  },
-];
+let available;
 
 export async function loadSelected() {
   return [
@@ -71,6 +31,13 @@ export async function loadSelected() {
 }
 
 export async function loadAvailable(term) {
+  if (!available) {
+    const response = await fetch('available');
+    if (!response.ok) {
+      throw new Error('Es konnten keine verfügbaren Dateien geladen werden.');
+    }
+    available = await response.json();
+  }
   if (term) {
     const filtered = [];
     available.forEach((folder) => {
