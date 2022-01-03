@@ -1,33 +1,11 @@
 let available;
 
 export async function loadSelected() {
-  return [
-    {
-      name: 'Ordner',
-      children: [
-        {
-          name: 'Datei',
-          original: 'Ordner/Datei',
-          id: 1,
-        },
-        {
-          name: 'Weitere Datei',
-          original: 'Ordner 2/Weitere Datei',
-          id: 2,
-        },
-      ],
-    },
-    {
-      name: 'Nummer 2',
-      children: [
-        {
-          name: 'Datei 2',
-          original: 'Ordner/Unterordner/Datei 2',
-          id: 3,
-        },
-      ],
-    },
-  ];
+  const response = await fetch('selected');
+  if (!response.ok) {
+    throw new Error('Die aktuelle Auswahl konnte nicht geladen werden.');
+  }
+  return await response.json() || [];
 }
 
 export async function loadAvailable(term) {
@@ -54,4 +32,15 @@ export async function loadAvailable(term) {
     return filtered;
   }
   return available;
+}
+
+export async function save(data) {
+  const response = await fetch('selected', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  return response.ok;
 }

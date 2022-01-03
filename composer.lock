@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "19b6dfde655016d5b73a2135eb0d3b75",
+    "content-hash": "2b686fe6a7c550f9fa2c6a9239b340df",
     "packages": [
         {
             "name": "dscheinah/sx-application",
@@ -110,6 +110,44 @@
                 "source": "https://github.com/dscheinah/sx-css/tree/v1.0.5"
             },
             "time": "2021-04-01T10:18:36+00:00"
+        },
+        {
+            "name": "dscheinah/sx-data",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dscheinah/sx-data.git",
+                "reference": "bf77ed6ef6da5ff55a923a2de2d64295740feaff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dscheinah/sx-data/zipball/bf77ed6ef6da5ff55a923a2de2d64295740feaff",
+                "reference": "bf77ed6ef6da5ff55a923a2de2d64295740feaff",
+                "shasum": ""
+            },
+            "require": {
+                "dscheinah/sx-container": "^1.0",
+                "php": "^7.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sx\\Data\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "description": "Database abstraction with corresponding implementation patterns.",
+            "support": {
+                "issues": "https://github.com/dscheinah/sx-data/issues",
+                "source": "https://github.com/dscheinah/sx-data/tree/v1.0.1"
+            },
+            "time": "2020-10-27T21:11:48+00:00"
         },
         {
             "name": "dscheinah/sx-js",

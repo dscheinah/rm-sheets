@@ -3,6 +3,7 @@
 use App\Container\Provider;
 use Sx\Container\Injector;
 use Sx\Message\ServerRequestFactory;
+use Sx\Message\StreamFactory;
 use Sx\Message\UriFactory;
 use Sx\Server\ApplicationInterface;
 
@@ -33,7 +34,10 @@ $injector->setup(new Provider());
 // Create the server request to be handled by the application.
 $uriFactory = new UriFactory();
 $requestFactory = new ServerRequestFactory($uriFactory);
-$request = $requestFactory->createServerRequest($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI'], $_SERVER);
+$streamFactory = new StreamFactory();
+$request = $requestFactory
+	->createServerRequest($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI'], $_SERVER)
+	->withBody($streamFactory->createStreamFromFile('php://input'));
 
 /** @var Sx\Server\ApplicationInterface $app */
 $app = $injector->get(ApplicationInterface::class);

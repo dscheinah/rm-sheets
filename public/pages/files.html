@@ -1,6 +1,8 @@
 <template>
     <form id="files">
         <h1>rM Sheets</h1>
+        <p class="sx-highlight">Die Auswahl wurde erfolgreich gespeichert.</p>
+        <p class="sx-error">Die Auswahl konnte nicht vollständig gespeichert werden.</p>
         <div class="sx-cards">
             <section>
                 <h2>Ausgewählte Dateien</h2>
@@ -26,6 +28,8 @@
   page.register('files', ({render, show, action, listen}) => {
     let selected = state.get('files-selected');
     let available = state.get('files-available');
+    let submitted = false;
+    let error = false;
 
     render(() => {
       const selectedFiles = {};
@@ -53,6 +57,8 @@
         li.innerHTML = `<details open><summary>${folder.name}</summary><ul>${list.join('')}</ul></details>`;
         return li;
       });
+      helper.style('#files p.sx-highlight', 'display', submitted ? 'block' : null);
+      helper.style('#files p.sx-error', 'display', error ? 'block' : null);
     });
 
     show(() => {
@@ -105,6 +111,12 @@
       page.show('files-select');
     });
 
+    action('#files', 'submit', (event) => {
+      event.preventDefault();
+      submitted = error = false;
+      state.dispatch('files-save', selected);
+    });
+
     listen('files-selected', (payload) => {
       selected = payload;
       state.dispatch('loading', false);
@@ -114,10 +126,23 @@
       available = payload;
       state.dispatch('loading', false);
     });
+
+    listen('files-save', (success) => {
+        if (success) {
+          submitted = true;
+          state.dispatch('files-selected', null);
+        } else {
+          error = true;
+        }
+    });
   });
 </script>
 
 <style>
+    #files p {
+        display: none;
+    }
+
     #files section {
         flex: 1 1 auto;
         width: 100%;

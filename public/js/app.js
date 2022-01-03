@@ -42,6 +42,7 @@ state.listen('sx-show', () => state.dispatch('loading', false));
 state.handle('backend-data', (payload) => data.load(payload));
 state.handle('files-selected', () => files.loadSelected());
 state.handle('files-available', (term) => files.loadAvailable(term));
+state.handle('files-save', (payload) => files.save(payload));
 
 // Define all pages and load the main page. The ID defined here is globally used for:
 //  - handling navigation by href or value (see above)
