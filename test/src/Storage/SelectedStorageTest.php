@@ -74,7 +74,7 @@ class SelectedStorageTest extends TestCase
 		$data = ['entries', 'from', 'database'];
 		$this->backend->expects($this->once())
 			->method('prepare')
-			->with('SELECT * FROM `selected` ORDER BY `ordering`;');
+			->with('SELECT * FROM `selected` ORDER BY `folder`, `ordering`;');
 		$this->backend->expects($this->once())
 			->method('fetch')
 			->willReturnCallback(

@@ -9,7 +9,7 @@ class SelectedStorage extends Storage
 {
 	public function fetchSelected(): Generator
 	{
-		yield from $this->fetch('SELECT * FROM `selected` ORDER BY `ordering`;');
+		yield from $this->fetch('SELECT * FROM `selected` ORDER BY `folder`, `ordering`;');
 	}
 
 	public function updateSelected(int $id, string $source, string $target, string $folder, int $ordering): int
