@@ -2,26 +2,24 @@
 
 namespace App\Repository;
 
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-
 class AvailableRepository
 {
-	private string $folder;
+	private AvailableDirectoryProvider $provider;
 
-	public function __construct(string $folder)
+	public function __construct(AvailableDirectoryProvider $provider)
 	{
-		$this->folder = $folder;
+		$this->provider = $provider;
 	}
 
 	public function get(): array
 	{
+		$baseLength = strlen($this->provider->getBaseDirectory());
 		$folders = [];
-		foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->folder)) as $file) {
+		foreach ($this->provider->getIterator() as $file) {
 			if ($file->getExtension() !== 'pdf') {
 				continue;
 			}
-			$path = trim(substr($file->getPath(), strlen($this->folder)), '/');
+			$path = trim(substr($file->getPath(), $baseLength), '/');
 			$name = $file->getFilename();
 			$folders[$path]['name'] = $path;
 			$folders[$path]['children'][$name] = [

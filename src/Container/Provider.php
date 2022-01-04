@@ -11,6 +11,8 @@ use App\Handler\SaveHandler;
 use App\Handler\SaveHandlerFactory;
 use App\Handler\SelectedHandler;
 use App\Handler\SelectedHandlerFactory;
+use App\Repository\AvailableDirectoryProvider;
+use App\Repository\AvailableDirectoryProviderFactory;
 use App\Storage\SelectedStorage;
 use App\Repository\AvailableRepository;
 use App\Repository\AvailableRepositoryFactory;
@@ -56,6 +58,7 @@ class Provider implements ProviderInterface
 		$injector->set(SelectedHandler::class, SelectedHandlerFactory::class);
 		$injector->set(SaveHandler::class, SaveHandlerFactory::class);
 		$injector->set(AvailableRepository::class, AvailableRepositoryFactory::class);
+		$injector->set(AvailableDirectoryProvider::class, AvailableDirectoryProviderFactory::class);
 		$injector->set(SelectedRepository::class, SelectedRepositoryFactory::class);
     }
 }

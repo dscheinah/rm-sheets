@@ -42,11 +42,10 @@ class SelectedRepository implements RepoInterface
 				$original = $file['original'];
 				$folderName = $folder['name'];
 				$target = sprintf(
-					'%s/%s-%s-%s.pdf',
+					'%s/%s-%s.pdf',
 					$folderName,
 					str_pad($index, 3, '0', STR_PAD_LEFT),
 					basename($original, '.pdf'),
-					$id
 				);
 				if (isset($ids[$id])) {
 					$this->storage->updateSelected($id, $original, $target, $folderName, $index);
