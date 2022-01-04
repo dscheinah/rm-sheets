@@ -1,6 +1,6 @@
 {
-    "name": "dscheinah/sx-skeleton",
-    "description": "This is a common setup for a simple sx application.",
+    "name": "dscheinah/rm-sheets",
+    "description": "Document Management for the reMarkable Cloud",
     "type": "project",
     "license": "GPL-3.0-or-later",
     "require": {
