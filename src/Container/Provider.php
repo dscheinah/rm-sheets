@@ -5,8 +5,6 @@ namespace App\Container;
 use App\ApplicationFactory;
 use App\Handler\AvailableHandler;
 use App\Handler\AvailableHandlerFactory;
-use App\Handler\ListHandler;
-use App\Handler\ListHandlerFactory;
 use App\Handler\SaveHandler;
 use App\Handler\SaveHandlerFactory;
 use App\Handler\SelectedHandler;
@@ -53,7 +51,6 @@ class Provider implements ProviderInterface
         $injector->set(RouterInterface::class, RouterFactory::class);
 		$injector->set(BackendInterface::class, MySqlBackendFactory::class);
 		$injector->set(SelectedStorage::class, StorageFactory::class);
-		$injector->set(ListHandler::class, ListHandlerFactory::class);
 		$injector->set(AvailableHandler::class, AvailableHandlerFactory::class);
 		$injector->set(SelectedHandler::class, SelectedHandlerFactory::class);
 		$injector->set(SaveHandler::class, SaveHandlerFactory::class);

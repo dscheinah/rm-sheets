@@ -1,15 +1,9 @@
-import Action from '../vendor/dscheinah/sx-js/src/Action.js';
 import Page from '../vendor/dscheinah/sx-js/src/Page.js';
 import State from '../vendor/dscheinah/sx-js/src/State.js';
-import init from './app/init.js';
-import navigate from './app/navigate.js';
-import * as data from './repository/data.js';
 import * as files from './repository/files.js';
 // By separating the helpers to its own namespace they do not need to packed to an object here.
 import * as helper from './helper.js';
 
-// Create the global event listener (on window) to be used for e.g. navigation.
-const action = new Action(window);
 // The repository that will handle the requests to the backend.
 // Create the global state manager.
 const state = new State();
@@ -17,16 +11,6 @@ const state = new State();
 // The state manager is used to trigger sx-show and sx-hide when the state of pages changes.
 // The state event gets the ID of the page as payload.
 const page = new Page(state, helper.element('#main'));
-
-// Populate the initial application state.
-init(state);
-
-// Handle the global navigation. This also handles links in pages automatically.
-// To add a link use <button value="${id}" data-navigation>...</button>.
-// The IDs must correspond with the pages defined later in this file.
-action.listen('[data-navigation]', 'click', (event, target) => navigate(state, page, event, target));
-// The navigation-back button is invisible but keyboard controllable.
-action.listen('#navigation-back', 'click', () => history.back());
 
 // A global state handler to show the loading animation.
 // Use state.dispatch('loading', true) to trigger the animation and state.dispatch('loading', false) to stop it.
@@ -49,8 +33,6 @@ state.handle('files-save', (payload) => files.save(payload));
 //  - registering scopes in pages
 //  - payload of sx-show and sx-hide state events
 // For real routing you can replace window.location.href with custom paths for each page.
-page.add('home', 'pages/home.html', window.location.href);
-page.add('backend', 'pages/backend.html', window.location.href);
 page.add('files', 'pages/files.html', window.location.href);
 page.add('files-select', 'pages/files/select.html', window.location.href);
 // If used with routing this must be replaced with a check on the called route.
