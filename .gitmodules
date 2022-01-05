@@ -1,0 +1,3 @@
+[submodule "bin/rmapi"]
+	path = bin/rmapi
+	url = https://github.com/juruen/rmapi.git

@@ -1,0 +1,35 @@
+services:
+  rmapi:
+    build: ./rmapi
+    volumes:
+      - ./config:/home/user/.config/rmapi
+      - ${SOURCE}:/data
+  rm-sheets:
+    build: ..
+    ports:
+      - "80:80"
+    volumes:
+      - ${SOURCE}:/data
+      - ./output:/output
+    environment:
+      - APP_ENV=production
+      - MYSQL_SERVER=rm-sheets.db
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+    restart: always
+  rm-sheets.db:
+    image: mysql
+    volumes:
+      - ../sql:/docker-entrypoint-initdb.d
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=1
+      - MYSQL_ONETIME_PASSWORD=1
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+    restart: always
+
+volumes:
+  db:

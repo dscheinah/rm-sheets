@@ -6,6 +6,7 @@ services:
     volumes:
       - .:/var/www/html
       - ${DATA_DIR}:/data
+      - ./bin/output:/output
     environment:
       - APP_ENV
       - MYSQL_SERVER=db

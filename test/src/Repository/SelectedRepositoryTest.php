@@ -5,18 +5,22 @@ namespace AppTest\Repository;
 use App\Repository\SelectedRepository;
 use App\Storage\SelectedStorage;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\StreamInterface;
 
 class SelectedRepositoryTest extends TestCase
 {
 	private const PERSISTED_DATA = [
-		['id' => 1, 'folder' => 'folder1', 'source' => '/some/where/source1.pdf'],
-		['id' => 2, 'folder' => 'folder2', 'source' => '/some/other/source2.pdf'],
-		['id' => 3, 'folder' => 'folder1', 'source' => '/folder/source3.pdf'],
+		['id' => 1, 'folder' => 'folder1', 'source' => '/some/where/source1.pdf', 'target' => 'folder1/000-source1.pdf'],
+		['id' => 2, 'folder' => 'folder2', 'source' => '/some/other/source2.pdf', 'target' => 'folder2/000-source2.pdf'],
+		['id' => 3, 'folder' => 'folder1', 'source' => '/folder/source3.pdf', 'target' => 'folder1/001-source3.pdf'],
 	];
 
 	private SelectedRepository $repository;
 
 	private SelectedStorage $storage;
+
+	private StreamInterface $stream;
 
 	protected function setUp(): void
 	{
@@ -27,7 +31,10 @@ class SelectedRepositoryTest extends TestCase
 				yield from self::PERSISTED_DATA;
 			}
 		);
-		$this->repository = new SelectedRepository($this->storage);
+		$this->stream = $this->createMock(StreamInterface::class);
+		$streamFactory = $this->createMock(StreamFactoryInterface::class);
+		$streamFactory->method('createStreamFromFile')->willReturn($this->stream);
+		$this->repository = new SelectedRepository($this->storage, $streamFactory, '/output');
 	}
 
 	public function testLoad(): void
@@ -102,6 +109,8 @@ class SelectedRepositoryTest extends TestCase
 		$this->storage->expects($this->once())
 			->method('deleteSelected')
 			->with(3);
+		$this->stream->expects($this->exactly(9))
+			->method('write');
 		$this->repository->save($data);
 	}
 

@@ -7,6 +7,7 @@ return [
 	// This can be used to prefix all routes. With that the app is not needed to be hosted on "/".
 	'prefix' => '',
 	'data_dir' => '/data',
+	'output_dir' => '/output',
 	'mysql' => [
 		'server' => getenv('MYSQL_SERVER'),
 		'user' => getenv('MYSQL_USER'),

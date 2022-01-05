@@ -7,6 +7,9 @@
 /test/coverage
 /test/node_modules
 /vendor
+/bin/config/*
+/bin/output/*
+/bin/docker-compose.yml
 .*
 !.git*
 !.*.dist
