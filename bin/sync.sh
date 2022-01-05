@@ -23,7 +23,7 @@ function generate() {
     targetDir=${TARGET}${dir/${SOURCE}/}
     echo "mkdir '$targetDir'"
     find "$dir" -type f -maxdepth 1 | sort | comm -23 - <(<output/exclude sort) | while read -r file; do
-      echo "put '${file/${SOURCE}/$docker}' '$targetDir'"
+      echo "put $(printf "%q" "${file/${SOURCE}/$docker}") '$targetDir'"
     done
   done
 
@@ -32,7 +32,7 @@ function generate() {
   done <output/mkdir
 
   cat output/mv* | while read -r line; do
-    echo "mv $(echo "$line" | xargs printf "'${TARGET}/%s' ")"
+    echo "mv $(echo "${line/\'/\'\\\'\'}" | xargs printf "'${TARGET}/%s' ")"
   done
 
   cat output/rm* | sort -r | while read -r line; do
