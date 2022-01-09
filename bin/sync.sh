@@ -22,7 +22,7 @@ function generate() {
   find "${SOURCE}" -type d | while read -r dir; do
     targetDir=${TARGET}${dir/${SOURCE}/}
     echo "mkdir '$targetDir'"
-    find "$dir" -type f -maxdepth 1 | sort | comm -23 - <(<output/exclude sort) | while read -r file; do
+    find "$dir" -maxdepth 1 -type f | grep -vf output/exclude | while read -r file; do
       echo "put $(printf "%q" "${file/${SOURCE}/$docker}") '$targetDir'"
     done
   done
