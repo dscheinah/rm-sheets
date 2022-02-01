@@ -27,9 +27,9 @@ function generate() {
     done
   done
 
-  while read -r line; do
+  sort output/mkdir | uniq | while read -r line; do
     echo "mkdir '${TARGET}/$line'"
-  done <output/mkdir
+  done
 
   cat output/mv* | while read -r line; do
     echo "mv $(echo "${line/\'/\'\\\'\'}" | xargs printf "'${TARGET}/%s' ")"
