@@ -16,7 +16,7 @@ docker=/data
 
 function generate() {
   cat output/restore* | while read -r line; do
-    echo "mv $(echo "${line/\'/\'\\\'\'}" | xargs printf "'${TARGET}/%s' ")"
+    echo "mv $(echo "${line//\'/\'\\\'\'}" | xargs printf "'${TARGET}/%s' ")"
   done
 
   find "${SOURCE}" -type d | while read -r dir; do
@@ -32,7 +32,7 @@ function generate() {
   done
 
   cat output/mv* | while read -r line; do
-    echo "mv $(echo "${line/\'/\'\\\'\'}" | xargs printf "'${TARGET}/%s' ")"
+    echo "mv $(echo "${line//\'/\'\\\'\'}" | xargs printf "'${TARGET}/%s' ")"
   done
 
   cat output/rm* | sort -r | while read -r line; do
