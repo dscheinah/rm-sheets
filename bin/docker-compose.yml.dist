@@ -2,8 +2,9 @@ services:
   rmapi:
     build: ./rmapi
     volumes:
+      - ./cache:/home/user/.cache/rmapi
       - ./config:/home/user/.config/rmapi
-      - ${SOURCE}:/data
+      - ${SOURCE_TMP}:/home/user/${TARGET}
   rm-sheets:
     build: ..
     ports:

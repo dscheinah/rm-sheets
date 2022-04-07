@@ -11,21 +11,18 @@ if [ -f .env ]; then
 fi
 
 SOURCE=${SOURCE%/}
+SOURCE_TMP=${SOURCE_TMP%/}
 TARGET=${TARGET%/}
-docker=/data
+
+cp -lR "${SOURCE}" "${SOURCE_TMP}"
+find "${SOURCE_TMP}" -type f | grep -f output/exclude | xargs -d "\n" rm -f
 
 function generate() {
   cat output/restore* | while read -r line; do
     echo "mv $(echo "${line//\'/\'\\\'\'}" | xargs printf "'${TARGET}/%s' ")"
   done
 
-  find "${SOURCE}" -type d | while read -r dir; do
-    targetDir=${TARGET}${dir/${SOURCE}/}
-    echo "mkdir '$targetDir'"
-    find "$dir" -maxdepth 1 -type f -mtime -1 | grep -vf output/exclude | while read -r file; do
-      echo "put $(printf "%q" "${file/${SOURCE}/$docker}") '$targetDir'"
-    done
-  done
+  echo "mput /"
 
   sort output/mkdir | uniq | while read -r line; do
     echo "mkdir '${TARGET}/$line'"
@@ -40,6 +37,8 @@ function generate() {
   done
 }
 
-generate 2> /dev/null | docker-compose run rmapi
+error=$(generate 2> /dev/null | docker-compose run rmapi | grep "Error:")
 
-rm -f output/restore* output/mv* output/rm* 2> /dev/null
+[[ -z "$error" ]] && rm -f output/restore* output/mv* output/rm* 2> /dev/null
+
+rm -r "${SOURCE_TMP}"
