@@ -14,6 +14,7 @@ SOURCE=${SOURCE%/}
 SOURCE_TMP=${SOURCE_TMP%/}
 TARGET=${TARGET%/}
 
+rm -rf "${SOURCE_TMP}"
 cp -lR "${SOURCE}" "${SOURCE_TMP}"
 find "${SOURCE_TMP}" -type f | grep -f output/exclude | xargs -d "\n" rm -f
 
