@@ -46,25 +46,25 @@ function generateRm() {
   done
 }
 
-error=$(generateRestore 2> /dev/null | docker-compose run rmapi | grep "Error:" | xargs echo -n)
+error=$(generateRestore 2> /dev/null | docker-compose run rmapi | grep "Error:" | xargs -0 echo -n)
 echo "$error"
 [[ -n "$error" ]] && exit 1
 rm -f output/restore* 2> /dev/null
 
-error=$(generatePut 2> /dev/null | docker-compose run rmapi | grep "Error:" | xargs echo -n)
+error=$(generatePut 2> /dev/null | docker-compose run rmapi | grep "Error:" | xargs -0 echo -n)
 echo "$error"
 [[ -n "$error" ]] && exit 2
 
-error=$(generateDir 2> /dev/null | docker-compose run rmapi | grep "Error:" | xargs echo -n)
+error=$(generateDir 2> /dev/null | docker-compose run rmapi | grep "Error:" | xargs -0 echo -n)
 echo "$error"
 [[ -n "$error" ]] && exit 3
 
-error=$(generateMv 2> /dev/null | docker-compose run rmapi | grep "Error:" | xargs echo -n)
+error=$(generateMv 2> /dev/null | docker-compose run rmapi | grep "Error:" | xargs -0 echo -n)
 echo "$error"
 [[ -n "$error" ]] && exit 4
 rm -f o output/mv* 2> /dev/null
 
-error=$(generateRm 2> /dev/null | docker-compose run rmapi | grep "Error:" | xargs echo -n)
+error=$(generateRm 2> /dev/null | docker-compose run rmapi | grep "Error:" | xargs -0 echo -n)
 echo "$error"
 [[ -n "$error" ]] && exit 5
 rm -f output/rm* 2> /dev/null
