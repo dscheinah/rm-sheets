@@ -4,7 +4,10 @@ services:
     volumes:
       - ./cache:/home/app/.cache/rmapi
       - ./config:/home/app/.config/rmapi
-      - ${SOURCE_TMP}:/home/app/${TARGET}
+      - ${SOURCE_TMP}:${TARGET}
+    environment:
+      - RMAPI_USE_HIDDEN_FILES=0
+    working_dir: /home/app
   rm-sheets:
     build: ..
     ports:

@@ -24,7 +24,7 @@ function generateRestore() {
 }
 
 function generatePut() {
-  echo "mput /"
+  echo "mput '${TARGET}'"
 }
 
 function generateDir() {
