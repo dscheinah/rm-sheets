@@ -12,7 +12,7 @@
     "postcss": "^8.4.31",
     "postcss-csso": "^5.0.0",
     "postcss-import": "^14.0.0",
-    "postcss-preset-env": "^6.7.0",
+    "postcss-preset-env": "^10.0.6",
     "posthtml": "^0.15.1",
     "posthtml-inline-assets": "^3.1.0",
     "posthtml-minifier": "^0.1.0",
